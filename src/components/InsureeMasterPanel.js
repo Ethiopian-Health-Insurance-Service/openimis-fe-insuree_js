@@ -259,6 +259,25 @@ class InsureeMasterPanel extends FormPanel {
                     />
                   </Grid>
                   <Grid item xs={3} className={classes.item}>
+                    <TextInput
+                      module="insuree"
+                      label="Insuree.kebeleId"
+                      readOnly={readOnly}
+                      value={!!edited && !!edited.kebeleId ? edited.kebeleId : ""}
+                      onChange={(v) => this.updateAttribute("kebeleId", v)}
+
+                    />
+                  </Grid>
+                  <Grid item xs={3} className={classes.item}>
+                    <TextInput
+                      module="insuree"
+                      label="Insuree.nationalId"
+                      readOnly={readOnly}
+                      value={!!edited && !!edited.nationalId ? edited.nationalId : ""}
+                      onChange={(v) => this.updateAttribute("nationalId", v)}
+                    />
+                  </Grid>
+                  <Grid item xs={3} className={classes.item}>
                     <PublishedComponent
                       pubRef="insuree.InsureeStatusPicker"
                       label="Insuree.status"

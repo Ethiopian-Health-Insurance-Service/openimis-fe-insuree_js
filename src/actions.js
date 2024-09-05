@@ -26,6 +26,8 @@ const FAMILY_HEAD_PROJECTION = (mm) => [
   "gender{code, gender}",
   "education{id}",
   "profession{id}",
+  "kebeleId",
+  'nationalId',
   "marital",
   "cardIssued",
   "currentVillage" + mm.getProjection("location.Location.FlatProjection"),
@@ -81,6 +83,8 @@ const INSUREE_FULL_PROJECTION = (mm) => [
   "typeOfId{code}",
   "passport",
   "relationship{id}",
+  "kebeleId",
+  "nationalId",
   "head",
   "status",
   "statusDate",
@@ -289,6 +293,8 @@ export function formatInsureeGQL(mm, insuree) {
     ${!!insuree.marital ? `marital: "${insuree.marital}"` : ""}
     ${!!insuree.passport ? `passport: "${formatGQLString(insuree.passport)}"` : ""}
     ${!!insuree.phone ? `phone: "${formatGQLString(insuree.phone)}"` : ""}
+    ${!!insuree.kebeleId ? `kebeleId: "${formatGQLString(insuree.kebeleId)}"` : ""}
+    ${!!insuree.nationalId ? `nationalId: "${formatGQLString(insuree.nationalId)}"` : ""}
     ${!!insuree.email ? `email: "${formatGQLString(insuree.email)}"` : ""}
     ${!!insuree.currentAddress ? `currentAddress: "${formatGQLString(insuree.currentAddress)}"` : ""}
     ${
