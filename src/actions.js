@@ -27,6 +27,8 @@ const FAMILY_HEAD_PROJECTION = (mm) => [
   "education{id}",
   "profession{id}",
   "kebeleId",
+  "remarks",
+  "employmentType",
   'nationalId',
   "marital",
   "cardIssued",
@@ -76,6 +78,7 @@ const INSUREE_FULL_PROJECTION = (mm) => [
   "gender{code, gender}",
   "education{id}",
   "profession{id}",
+  "employmentType",
   "marital",
   "cardIssued",
   "currentVillage" + mm.getProjection("location.Location.FlatProjection"),
@@ -84,6 +87,7 @@ const INSUREE_FULL_PROJECTION = (mm) => [
   "passport",
   "relationship{id}",
   "kebeleId",
+  "remarks",
   "nationalId",
   "head",
   "status",
@@ -260,6 +264,7 @@ export function fetchInsureeSummaries(mm, filters, ignoreLocation = false) {
     "phone",
     "gender{code}",
     "dob",
+    "employmentType",
     "marital",
     "status",
     "family{uuid,location" + mm.getProjection("location.Location.FlatProjection") + "}",
@@ -291,9 +296,11 @@ export function formatInsureeGQL(mm, insuree) {
     ${!!insuree.dob ? `dob: "${insuree.dob}"` : ""}
     head: ${!!insuree.head}
     ${!!insuree.marital ? `marital: "${insuree.marital}"` : ""}
+    ${!!insuree.employmentType? `employmentType: "${insuree.employmentType}"`: ""}
     ${!!insuree.passport ? `passport: "${formatGQLString(insuree.passport)}"` : ""}
     ${!!insuree.phone ? `phone: "${formatGQLString(insuree.phone)}"` : ""}
     ${!!insuree.kebeleId ? `kebeleId: "${formatGQLString(insuree.kebeleId)}"` : ""}
+    ${!!insuree.remarks ? `remarks: "${insuree.remarks}"` : ""}
     ${!!insuree.nationalId ? `nationalId: "${formatGQLString(insuree.nationalId)}"` : ""}
     ${!!insuree.email ? `email: "${formatGQLString(insuree.email)}"` : ""}
     ${!!insuree.currentAddress ? `currentAddress: "${formatGQLString(insuree.currentAddress)}"` : ""}
@@ -521,3 +528,30 @@ export function clearWorkersExport() {
     });
   };
 }
+
+export function ValidateInputValue(mm,variables ) {
+  return graphqlWithVariables(
+    `
+    query($nationalId: String!){
+      isUniqueNationalId(nationalId: $nationalId) 
+    }
+    `,
+    variables, 
+    `INPUT_VALUE_FIELDS_VALIDATION`,
+  );
+}
+
+
+export function inputValueSetIsValid() {
+  return (dispatch) => {
+    dispatch({ type: `INPUT_VALUE_VALIDATION_FIELDS_SET_VALID` });
+  };
+}
+
+
+export function inputValueClearAction() {
+  return (dispatch) => {
+    dispatch({ type: `INPUT_VALUE_VALIDATION_FIELDS_CLEAR` });
+  };
+}
+
