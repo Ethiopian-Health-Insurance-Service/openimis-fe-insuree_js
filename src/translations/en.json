@@ -27,9 +27,10 @@
   "insuree.Insuree.searchCriteria": "Search Criteria",
   "insuree.Insuree.label": "Insuree",
   "insuree.Insuree.picker.dialog.title": "Search Insuree",
-  "insuree.Insuree.chfId": "Insurance No.",
+  "insuree.Insuree.chfId": "SHI-ID.",
   "insuree.Insuree.nationalId": "National ID",
   "insuree.Insuree.kebeleId": "Kebele ID",
+  "insuree.Insuree.remarks": "Remarks",
   "insuree.Insuree.lastName": "Last Name",
   "insuree.Insuree.otherNames": "Given Names",
   "insuree.Insuree.names": "Name",
@@ -256,5 +257,11 @@
   "insuree.FamilyMembersTable.InsuranceNo": "Insurance No.",
   "insuree.FamilyMembersTable.memberName": "Family Member",
   "insuree.FamilyMembersTable.phone": "Phone",
-  "insuree.FamilyMembersTable.noMembers": "Family not registered."
+  "insuree.FamilyMembersTable.noMembers": "Family not registered.",
+  "insuree.InsureeEmployementType": "Employement Type",
+  "insuree.InsureeEmployementType.null": "Any",
+  "insuree.InsureeEmployementType.P": "Permanent",
+  "insuree.InsureeEmployementType.R": "Probation",
+  "insuree.InsureeEmployementType.C": "Contract",
+  "insuree.errorMessage": "this National Id is already used"
 }

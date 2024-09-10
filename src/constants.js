@@ -4,6 +4,7 @@ export const PHOTO_STATUS = ["with", "without"];
 export const FAMILY_STATUS = ["with", "without"];
 export const EMPTY_STRING = "";
 export const MODULE_NAME = "insuree";
+export const INSUREE_EMPLOYEMENT_TYPE = ["P","R","C"];
 
 export const INSUREE_ACTIVE_STRING = "AC";
 export const INSUREE_INACTIVE_STRING = "IN";

@@ -231,6 +231,16 @@ class InsureeMasterPanel extends FormPanel {
                   </Grid>
                   <Grid item xs={3} className={classes.item}>
                     <PublishedComponent
+                      pubRef="insuree.InsureeEmployementTypePicker"
+                      value={!!edited && !!edited.employmentType ? edited.employmentType : ""}
+                      module="insuree"
+                      readOnly={readOnly}
+                      withNull={false}
+                      onChange={(v) => this.updateAttribute("employmentType", v)}
+                    />
+                  </Grid>
+                  <Grid item xs={3} className={classes.item}>
+                    <PublishedComponent
                       pubRef="insuree.EducationPicker"
                       module="insuree"
                       value={!!edited && !!edited.education ? edited.education.id : ""}
@@ -265,15 +275,18 @@ class InsureeMasterPanel extends FormPanel {
                       readOnly={readOnly}
                       value={!!edited && !!edited.kebeleId ? edited.kebeleId : ""}
                       onChange={(v) => this.updateAttribute("kebeleId", v)}
-
                     />
                   </Grid>
                   <Grid item xs={3} className={classes.item}>
-                    <TextInput
-                      module="insuree"
+                    <PublishedComponent
+                      pubRef="insuree.ValidateInputPicker"
                       label="Insuree.nationalId"
-                      readOnly={readOnly}
-                      value={!!edited && !!edited.nationalId ? edited.nationalId : ""}
+                      value={edited?.nationalId}
+                      withNull={false}
+                      module="insuree"
+                      readOnly={false}
+                      searchString={edited?.nationalId}
+                      searchTitle="isUniqueNationalId" 
                       onChange={(v) => this.updateAttribute("nationalId", v)}
                     />
                   </Grid>
@@ -287,6 +300,16 @@ class InsureeMasterPanel extends FormPanel {
                       readOnly={!edited?.uuid || readOnly}
                       onChange={(v) => this.updateAttributes({ "status": v, "statusReason": null })}
                       required={this.isInsureeStatusRequired}
+                    />
+                  </Grid>
+                  <Grid item xs={7} className={classes.item}>
+                    <TextInput
+                      module="insuree"
+                      label="Insuree.remarks"
+                      readOnly={readOnly}
+                      error={this.state.error}
+                      value={!!edited && !!edited.remarks ? edited.remarks : ""}
+                      onChange={(v) => this.updateAttribute("remarks", v)}
                     />
                   </Grid>
                   {!!edited?.status && edited?.status !== INSUREE_ACTIVE_STRING && (

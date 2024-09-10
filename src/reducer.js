@@ -6,6 +6,7 @@ import {
   dispatchMutationReq,
   dispatchMutationResp,
   dispatchMutationErr,
+  formatMessage,
 } from "@openimis/fe-core";
 
 function reducer(
@@ -67,6 +68,7 @@ function reducer(
     workersExport: null,
     workersExportPageInfo: {},
     errorWorkersExport: null,
+    headNationalIdSelected: false,
   },
   action,
 ) {
@@ -530,6 +532,68 @@ function reducer(
         workersExport: null,
         workersExportPageInfo: {},
         errorWorkersExport: null,
+      };
+    case "INPUT_VALUE_FIELDS_VALIDATION_REQ":
+      return {
+        ...state,
+        validationFields: {
+          ...state.validationFields,
+          inputValue: {
+            isValidating: true,
+            isValid: false,
+            validationError: null,
+          },
+        },
+      };
+    case "INPUT_VALUE_FIELDS_VALIDATION_RESP":
+      return {
+        ...state,
+        validationFields: {
+          ...state.validationFields,
+          inputValue: {
+            isValidating: false,
+            isValid: action.payload?.data.isUniqueNationalId,
+            validationError: action.payload?.data.isUniqueNationalId == "false" ? "error": null,
+          },
+        },
+      };
+    case "INPUT_VALUE_FIELDS_VALIDATION_ERR":
+      return {
+        ...state,
+        validationFields: {
+          ...state.validationFields,
+          inputValue: {
+            isValidating: false,
+            isValid: false,
+            validationError: formatServerError(action.payload),
+          },
+        },
+      };
+    case "INPUT_VALUE_VALIDATION_FIELDS_SET_VALID":
+      return {
+        ...state,
+        validationFields: {
+          ...state.validationFields,
+          inputValue: {
+            isValidating: false,
+            isValid: true,
+            validationErrorMessage: null,
+            validationError: null,
+          },
+        },
+      };
+    case "INPUT_VALUE_VALIDATION_FIELDS_CLEAR":
+      return {
+        ...state,
+        validationFields: {
+          ...state.validationFields,
+          inputValue: {
+            isValidating: true,
+            isValid: false,
+            validationErrorMessage: null,
+            validationError: null,
+          },
+        },
       };
     case "INSUREE_MUTATION_REQ":
       return dispatchMutationReq(state, action);
