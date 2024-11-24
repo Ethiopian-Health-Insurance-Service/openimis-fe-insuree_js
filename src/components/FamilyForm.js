@@ -34,6 +34,10 @@ const INSUREE_FAMILY_OVERVIEW_PANELS_CONTRIBUTION_KEY = "insuree.FamilyOverview.
 const INSUREE_FAMILY_OVERVIEW_CONTRIBUTED_MUTATIONS_KEY = "insuree.FamilyOverview.mutations";
 
 class FamilyForm extends Component {
+  constructor(props) {
+    super(props);
+    this.fields = props.modulesManager.getConf("fe-insuree", "fields", {});
+  }
   state = {
     lockNew: false,
     reset: 0,
@@ -134,12 +138,13 @@ class FamilyForm extends Component {
   };
 
   canSave = () => {
-    if (!this.state.family.location) return false;
-    if (!this.state.family.uuid && !this.props.isChfIdValid) return false;
-    if (this.state.family.validityTo) return false;
-    if (this.state.family.confirmationType?.isConfirmationNumberRequired && !this.state.family.confirmationNo)
-      return false;
-    return this.state.family.headInsuree && isValidInsuree(this.state.family.headInsuree, this.props.modulesManager);
+    // if ((!!this.fields && this.fields?.FamilyDetails !== "N") && !this.state.family.location) return false;
+    // if (!this.state.family.uuid && !this.props.isChfIdValid) return false;
+    // if ((!!this.fields && this.fields?.FamilyDetails !== "N") && this.state.family.validityTo) return false;
+    // if ((!!this.fields && this.fields?.FamilyDetails !== "N") && this.state.family.confirmationType?.isConfirmationNumberRequired && !this.state.family.confirmationNo)
+    //   return false;
+    // return this.state.family.headInsuree && isValidInsuree(this.state.family.headInsuree, this.props.modulesManager);
+    return true;
   };
 
   _save = (family) => {
@@ -172,6 +177,9 @@ class FamilyForm extends Component {
       save,
       back,
     } = this.props;
+    console.log("this.state", this.state);
+    console.log("this.props", this.props);
+    console.log("this.fields ", this.fields);
     const { family, newFamily, isSaved } = this.state;
     if (!rights.includes(RIGHT_FAMILY)) return null;
     let runningMutation = !!family && !!family.clientMutationId;

@@ -4,7 +4,7 @@ export const PHOTO_STATUS = ["with", "without"];
 export const FAMILY_STATUS = ["with", "without"];
 export const EMPTY_STRING = "";
 export const MODULE_NAME = "insuree";
-export const INSUREE_EMPLOYEMENT_TYPE = ["P","R","C"];
+export const INSUREE_EMPLOYEMENT_TYPE = ["P","R"];
 
 export const INSUREE_ACTIVE_STRING = "AC";
 export const INSUREE_INACTIVE_STRING = "IN";
@@ -33,4 +33,7 @@ export const DEFAULT = {
   GENERIC_VOUCHER_ENABLED: false,
 };
 
-export const WITHOUT_STR = "without"
+export const WITHOUT_STR = "without";
+export const INSUREE_RELATION_SPOUCE = 8;
+export const INSUREE_RELATION_CHILD = 4;
+export const INSUREE_PROFESSION_SELF_EMPLOYMENT = 3
