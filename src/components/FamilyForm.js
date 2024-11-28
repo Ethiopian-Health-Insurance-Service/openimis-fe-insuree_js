@@ -141,8 +141,7 @@ class FamilyForm extends Component {
     if (!this.state.family.location) return false;
     if (!this.state.family.uuid && !this.props.isChfIdValid) return false;
     if (this.state.family.validityTo) return false;
-    if (this.state.family.confirmationType?.isConfirmationNumberRequired && !this.state.family.confirmationNo)
-      return false;
+
     return this.state.family.headInsuree && isValidInsuree(this.state.family.headInsuree, this.props.modulesManager);
   };
 
