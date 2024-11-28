@@ -54,7 +54,6 @@ class ProfessionPicker extends Component {
       nullLabel = null,
       isHead,
     } = this.props;
-    console.log("pickers props ",this.props )
     const professionValues = this.renderProfessionValues(isHead, professions)
     return (
       <AutoSuggestion

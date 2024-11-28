@@ -172,6 +172,7 @@ class FamilyMasterPanel extends FormPanel {
                   readOnly={readOnly}
                   value={!!edited && !!edited.familyType ? edited.familyType.code : null}
                   onChange={(v) => this.updateAttribute("familyType", { code: v })}
+                  canFetchFamilyTypes={this.fields.FamilyDetails !== "N" ? true : false}
                 />
               </Grid>
               <Grid item xs={2} className={classes.item}>
@@ -181,6 +182,7 @@ class FamilyMasterPanel extends FormPanel {
                   readOnly={readOnly}
                   value={edited?.confirmationType ?? null}
                   onChange={(v) => this.updateAttribute("confirmationType", v)}
+                  canFetchConfirmationTypes={this.fields.FamilyDetails !== "N" ? true : false}
                 />
               </Grid>
               <Grid item xs={3} className={classes.item}>

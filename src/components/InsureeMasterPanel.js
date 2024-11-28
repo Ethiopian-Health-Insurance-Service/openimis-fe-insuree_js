@@ -80,7 +80,6 @@ class InsureeMasterPanel extends FormPanel {
       actions,
       editedId,
     } = this.props;
-    console.log("insureee props ", this.props);
 
     return (
       <Grid container>
@@ -193,17 +192,17 @@ class InsureeMasterPanel extends FormPanel {
                       label={formatMessage(intl, "insuree", "Insuree.cardIssued")}
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={12}> 
                     <PublishedComponent
                       pubRef="insuree.InsureeAddress"
                       value={edited}
                       module="insuree"
                       readOnly={readOnly}
-                      onChangeLocation={(v) => this.updateAttribute("currentVillage", v)}
+                      onChangeLocation={(v) => this.updateAttribute("currentVillage", v)}  
                       onChangeAddress={(v) => this.updateAttribute("currentAddress", v)}
                     />
                   </Grid>
-                  <Grid item xs={4} className={classes.item}>
+                  {/* <Grid item xs={4} className={classes.item}>
                     <TextInput
                       module="insuree"
                       label="Insuree.address"
@@ -212,7 +211,7 @@ class InsureeMasterPanel extends FormPanel {
                       value={!edited ? "" : edited.insureeAdress}
                       onChange={(v) => this.updateAttribute("address", v)}
                     />
-                  </Grid>
+                  </Grid> */} 
                   <Grid item xs={6} className={classes.item}>
                     <TextInput
                       module="insuree"
@@ -238,7 +237,7 @@ class InsureeMasterPanel extends FormPanel {
                       value={!!edited && !!edited.profession ? edited.profession.id : null}
                       readOnly={readOnly}
                       withNull={false}
-                      isHead={edited.head}
+                      isHead={edited.head || edited?.family?.headInsuree?.head}
                       onChange={(v) => this.updateAttribute("profession", { id: v })}
                     />
                   </Grid>
@@ -354,56 +353,23 @@ class InsureeMasterPanel extends FormPanel {
                     </Grid>
                   )}
                 </Grid>
-                <Grid container className={classes.item}>
+                <Grid container >
                   <Grid item xs={12}>
                     <PublishedComponent
                       pubRef="location.DetailedLocation"
                       withNull={true}
                       readOnly={readOnly}
                       required
-                      value={!edited ? null : edited.location}
-                      onChange={(v) => this.updateAttribute("location", v)}
+                      value={!edited ? null : edited.householdLocation}
+                      onChange={(v) => this.updateAttribute("householdLocation", v)}
                       filterLabels={false}
                     />
                   </Grid>
                   
-                  {this.fields.FamilyDetails !== "N" && (
-                    <>
-                      {" "}
-                      <Grid item xs={2} className={classes.item}>
-                        <PublishedComponent
-                          pubRef="insuree.FamilyTypePicker"
-                          withNull={false}
-                          readOnly={readOnly}
-                          value={!!edited && !!edited.familyType ? edited.familyType.code : null}
-                          onChange={(v) => this.updateAttribute("familyType", { code: v })}
-                        />
-                      </Grid>
-                      <Grid item xs={2} className={classes.item}>
-                        <PublishedComponent
-                          pubRef="insuree.ConfirmationTypePicker"
-                          withNull={false}
-                          readOnly={readOnly}
-                          value={edited?.confirmationType ?? null}
-                          onChange={(v) => this.updateAttribute("confirmationType", v)}
-                        />
-                      </Grid>
-                      <Grid item xs={3} className={classes.item}>
-                        <TextInput
-                          module="insuree"
-                          label="Family.confirmationNo"
-                          readOnly={readOnly}
-                          value={!edited ? "" : edited.confirmationNo}
-                          onChange={(v) => this.updateAttribute("confirmationNo", v)}
-                          required={edited?.confirmationType?.isConfirmationNumberRequired ?? false}
-                        />
-                      </Grid>
-                    </>
-                  )}
                   <Grid item xs={4} className={classes.item}>
                     <TextInput
                       module="insuree"
-                      label="Family.address"
+                      label="Insuree.householdAddress"
                       multiline
                       readOnly={readOnly}
                       value={!edited ? "" : edited.officeAdress}

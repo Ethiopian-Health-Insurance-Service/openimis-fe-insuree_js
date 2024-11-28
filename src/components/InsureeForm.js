@@ -23,6 +23,7 @@ import { insureeLabel, isValidInsuree, isValidWorker } from "../utils/utils";
 import FamilyDisplayPanel from "./FamilyDisplayPanel";
 import InsureeMasterPanel from "../components/InsureeMasterPanel";
 import WorkerMasterPanel from "./worker/WorkerMasterPanel";
+import InsureeAttachmentPanel from "./InsureeAttachmentPanel";
 
 const styles = (theme) => ({
   page: theme.page,
@@ -32,6 +33,11 @@ const styles = (theme) => ({
 const INSUREE_INSUREE_FORM_CONTRIBUTION_KEY = "insuree.InsureeForm";
 
 class InsureeForm extends Component {
+
+  state = {
+    attachmentsInsuree: null,
+  }
+
   constructor(props) {
     super(props);
     this.isWorker = props.modulesManager.getConf("fe-core", "isWorker", DEFAULT.IS_WORKER);
@@ -205,16 +211,28 @@ class InsureeForm extends Component {
     }
     return true;
   };
+  
+  canSaveDetail = (d) => {
+    if (!d) return false;
+    if (d.filename === null || d.filename === undefined || d.filename === "") return false;
+    if (d.title === null || d.title === undefined || d.title === "") return false;
+    return true;
+  };
 
   canSave = () => {
     const doesInsureeChange = this.doesInsureeChange();
     if (!doesInsureeChange) return false;
     if (this.state.lockNew) return false;
     if (!this.props.isChfIdValid) return false;
-
+    if (this.state.insuree.attachments !== undefined) {
+      if (this.state.insuree.attachments.length && this.state.insuree.attachments.filter((a) => !this.canSaveDetail(a)).length - 1) {
+        return false;
+      }
+    }
     return this.isWorker
       ? isValidWorker(this.state.insuree)
       : isValidInsuree(this.state.insuree, this.props.modulesManager);
+
   };
 
   _save = (insuree) => {
@@ -276,7 +294,7 @@ class InsureeForm extends Component {
               readOnly={readOnly || runningMutation || !!insuree.validityTo}
               actions={actions}
               HeadPanel={FamilyDisplayPanel}
-              Panels={[this.isWorker ? WorkerMasterPanel : InsureeMasterPanel]}
+              Panels={[this.isWorker ? WorkerMasterPanel : InsureeMasterPanel, InsureeAttachmentPanel]}
               contributedPanelsKey={INSUREE_INSUREE_FORM_CONTRIBUTION_KEY}
               insuree={this.state.insuree}
               onEditedChanged={this.onEditedChanged}

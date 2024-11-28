@@ -29,7 +29,7 @@ const FAMILY_HEAD_PROJECTION = (mm) => [
   "kebeleId",
   "remarks",
   "employmentType",
-  'nationalId',
+  "nationalId",
   "marital",
   "cardIssued",
   "currentVillage" + mm.getProjection("location.Location.FlatProjection"),
@@ -50,9 +50,6 @@ const FAMILY_FULL_PROJECTION = (mm) => [
   "id",
   "uuid",
   "poverty",
-  "confirmationNo",
-  "confirmationType{code, isConfirmationNumberRequired}",
-  "familyType{code}",
   "address",
   "validityFrom",
   "validityTo",
@@ -95,6 +92,9 @@ const INSUREE_FULL_PROJECTION = (mm) => [
   "statusReason{code,insureeStatusReason}",
   "email",
   "phone",
+  "householdLocation" + mm.getProjection("location.Location.FlatProjection"),
+  "householdAddress",
+  "attachments{idAttachment,filename,document,title,date,mime}",
   "healthFacility" + mm.getProjection("location.HealthFacilityPicker.projection"),
 ];
 
@@ -121,6 +121,7 @@ export function fetchInsuree(mm, chfid) {
       "validityTo",
       "gender{code}",
       "status",
+      "attachments{ document}",
       `family{${FAMILY_FULL_PROJECTION(mm).join(",")}}`,
       "photo{folder,filename,photo}",
       "gender{code, gender, altLanguage}",
@@ -153,7 +154,6 @@ export function fetchFamilySummaries(mm, filters) {
     "id",
     "uuid",
     "poverty",
-    "confirmationNo",
     "validityFrom",
     "validityTo",
     "headInsuree{id,uuid,chfId,lastName,otherNames,email,phone, dob}",
@@ -296,7 +296,7 @@ export function formatInsureeGQL(mm, insuree) {
     ${!!insuree.dob ? `dob: "${insuree.dob}"` : ""}
     head: ${!!insuree.head}
     ${!!insuree.marital ? `marital: "${insuree.marital}"` : ""}
-    ${!!insuree.employmentType? `employmentType: "${insuree.employmentType}"`: ""}
+    ${!!insuree.employmentType ? `employmentType: "${insuree.employmentType}"` : ""}
     ${!!insuree.passport ? `passport: "${formatGQLString(insuree.passport)}"` : ""}
     ${!!insuree.phone ? `phone: "${formatGQLString(insuree.phone)}"` : ""}
     ${!!insuree.kebeleId ? `kebeleId: "${formatGQLString(insuree.kebeleId)}"` : ""}
@@ -304,6 +304,7 @@ export function formatInsureeGQL(mm, insuree) {
     ${!!insuree.nationalId ? `nationalId: "${formatGQLString(insuree.nationalId)}"` : ""}
     ${!!insuree.email ? `email: "${formatGQLString(insuree.email)}"` : ""}
     ${!!insuree.currentAddress ? `currentAddress: "${formatGQLString(insuree.currentAddress)}"` : ""}
+    ${!!insuree.householdAddress ? `householdAddress: "${formatGQLString(insuree.householdAddress)}"` : ""}
     ${
       !!insuree.currentVillage && !!insuree.currentVillage.id
         ? `currentVillageId: ${decodeId(insuree.currentVillage.id)}`
@@ -329,6 +330,8 @@ export function formatInsureeGQL(mm, insuree) {
         : ""
     }
     ${!!insuree.jsonExt ? `jsonExt: ${formatJsonField(insuree.jsonExt)}` : ""}
+    ${!!insuree.attachments && insuree.attachments.length>0 ? formatAttachments(insuree.attachments): ""}
+    ${!!insuree.householdLocation ? `householdLocationId: ${decodeId(insuree.householdLocation.id)}` : ""}
   `;
 }
 
@@ -347,7 +350,6 @@ export function formatFamilyGQL(mm, family) {
         ? `confirmationTypeId: "${family.confirmationType.code}"`
         : ""
     }
-    ${!!family.confirmationNo ? `confirmationNo: "${formatGQLString(family.confirmationNo)}"` : ""}
     ${!!family.jsonExt ? `jsonExt: ${formatJsonField(family.jsonExt)}` : ""}
     ${!!family.contribution ? `contribution: ${formatJsonField(family.contribution)}` : ""}
   `;
@@ -529,18 +531,17 @@ export function clearWorkersExport() {
   };
 }
 
-export function ValidateInputValue(mm,variables ) {
+export function ValidateInputValue(mm, variables) {
   return graphqlWithVariables(
     `
     query($nationalId: String!){
       isUniqueNationalId(nationalId: $nationalId) 
     }
     `,
-    variables, 
+    variables,
     `INPUT_VALUE_FIELDS_VALIDATION`,
   );
 }
-
 
 export function inputValueSetIsValid() {
   return (dispatch) => {
@@ -548,10 +549,53 @@ export function inputValueSetIsValid() {
   };
 }
 
-
 export function inputValueClearAction() {
   return (dispatch) => {
     dispatch({ type: `INPUT_VALUE_VALIDATION_FIELDS_CLEAR` });
   };
 }
 
+export function fetchInsureeAttachments(insuree) {
+  const payload = formatPageQuery(
+    "insureeAttachments",
+    [`insuree_id: "${decodeId(insuree.id)}"`],
+    ["idAttachment", "title", "folder", "date", "filename", "mime"],
+  );
+  return graphql(payload, "INSUREE_INSUREE_ATTACHMENTS");
+}
+
+export function deleteAttachment(attach, clientMutationLabel) {
+  let mutation = formatMutation("deleteInsureeAttachment", `id: "${decodeId(attach.id)}"`, clientMutationLabel);
+  var requestedDateTime = new Date();
+  return graphql(
+    mutation.payload,
+    ["CLAIM_MUTATION_REQ", "INSUREE_DELETE_INSUREE_ATTACHMENT_RESP", "INSUREE_MUTATION_ERR"],
+    {
+      clientMutationId: mutation.clientMutationId,
+      clientMutationLabel,
+      requestedDateTime,
+    },
+  );
+}
+
+export function formatAttachments(attachments) {
+  if (!!attachments) {
+    attachments.pop();
+    return `attachments: [
+    ${attachments.map((a) => formatAttachment(a)).join("\n")}
+  ]`;
+  }
+  return ``
+}
+
+export function formatAttachment(attach) {
+  return `{
+    ${!!attach.id ? `id: "${decodeId(attach.id)}"` : ""}
+    ${!!attach.insureeId ? `insureeId: "${decodeId(attach.insureeId)}"` : ""}
+    ${!!attach.title ? `title: "${formatGQLString(attach.title)}"` : ""}
+    ${!!attach.date ? `date: "${attach.date}"` : ""}
+    ${!!attach.mime ? `mime: "${attach.mime}"` : ""}
+    ${!!attach.filename ? `filename: "${formatGQLString(attach.filename)}"` : ""}
+    ${!!attach.document ? `document: "${attach.document}"` : ""}
+  }`;
+}

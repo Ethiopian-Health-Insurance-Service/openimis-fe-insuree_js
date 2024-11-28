@@ -102,6 +102,7 @@
   "insuree.Family.members.gender": "Member Gender",
   "insuree.Family.address": "Office Adress",
   "insuree.Insuree.address": "Insuree Adress ",
+  "insuree.Insuree.householdAddress": "Household Adress ",
   "insuree.Family.poverty": "Poverty Status",
   "insuree.Family.confirmationNo": "Confirmation No.",
   "insuree.Family.ConfirmationType.null": "None",
@@ -264,5 +265,11 @@
   "insuree.InsureeEmployementType.P": "Permanent",
   "insuree.InsureeEmployementType.R": "Probation",
   "insuree.InsureeEmployementType.C": "Contract",
-  "insuree.errorMessage": "this National Id is already used"
+  "insuree.errorMessage": "this National Id is already used",
+  "insuree.insuree.InsureeFilePanel.title": "Attachments",
+  "insuree.insureeAttachment.type": "Type",
+  "insuree.insureeAttachment.title": "Title",
+  "insuree.insureeAttachment.date": "Date",
+  "insuree.edit.attachments.title": "Attachments",
+  "insuree.insureeAttachment.fileName": "File"
 }

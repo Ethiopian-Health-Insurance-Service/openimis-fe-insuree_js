@@ -138,13 +138,12 @@ class FamilyForm extends Component {
   };
 
   canSave = () => {
-    // if ((!!this.fields && this.fields?.FamilyDetails !== "N") && !this.state.family.location) return false;
-    // if (!this.state.family.uuid && !this.props.isChfIdValid) return false;
-    // if ((!!this.fields && this.fields?.FamilyDetails !== "N") && this.state.family.validityTo) return false;
-    // if ((!!this.fields && this.fields?.FamilyDetails !== "N") && this.state.family.confirmationType?.isConfirmationNumberRequired && !this.state.family.confirmationNo)
-    //   return false;
-    // return this.state.family.headInsuree && isValidInsuree(this.state.family.headInsuree, this.props.modulesManager);
-    return true;
+    if (!this.state.family.location) return false;
+    if (!this.state.family.uuid && !this.props.isChfIdValid) return false;
+    if (this.state.family.validityTo) return false;
+    if (this.state.family.confirmationType?.isConfirmationNumberRequired && !this.state.family.confirmationNo)
+      return false;
+    return this.state.family.headInsuree && isValidInsuree(this.state.family.headInsuree, this.props.modulesManager);
   };
 
   _save = (family) => {
@@ -177,9 +176,7 @@ class FamilyForm extends Component {
       save,
       back,
     } = this.props;
-    console.log("this.state", this.state);
-    console.log("this.props", this.props);
-    console.log("this.fields ", this.fields);
+    
     const { family, newFamily, isSaved } = this.state;
     if (!rights.includes(RIGHT_FAMILY)) return null;
     let runningMutation = !!family && !!family.clientMutationId;
