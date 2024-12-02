@@ -40,8 +40,9 @@ class ConfirmationTypePicker extends Component {
       required = false,
       withNull = false,
       nullLabel = null,
+      canFetchConfirmationTypes
     } = this.props;
-    let options = !!confirmationTypes
+    let options = !!confirmationTypes && canFetchConfirmationTypes == true
       ? confirmationTypes.map((v) => ({ value: v, label: this.formatSuggestion(v) }))
       : [];
     if (withNull) {

@@ -8,6 +8,7 @@ import {
   dispatchMutationErr,
   formatMessage,
 } from "@openimis/fe-core";
+import { INSUREE_RELATION_CHILD, INSUREE_RELATION_SPOUCE } from "./constants";
 
 function reducer(
   state = {
@@ -400,7 +401,7 @@ function reducer(
         ...state,
         fetchingRelations: false,
         fetchedRelations: true,
-        relations: action.payload.data.relations.map((p) => p.id),
+        relations: action.payload.data.relations.map((p) => p.id).filter((id) => id !== INSUREE_RELATION_SPOUCE && id !== INSUREE_RELATION_CHILD),
         errorRelations: formatGraphQLError(action.payload),
       };
     case "INSUREE_RELATIONS_ERR":
@@ -553,7 +554,7 @@ function reducer(
           inputValue: {
             isValidating: false,
             isValid: action.payload?.data.isUniqueNationalId,
-            validationError: action.payload?.data.isUniqueNationalId == "false" ? "error": null,
+            validationError: action.payload?.data.isUniqueNationalId == "false" ? "error" : null,
           },
         },
       };

@@ -6,6 +6,7 @@ import { formatMessage, AutoSuggestion, withModulesManager } from "@openimis/fe-
 import { fetchProfessions } from "../actions";
 import _debounce from "lodash/debounce";
 import _ from "lodash";
+import { INSUREE_PROFESSION_SELF_EMPLOYMENT } from "../constants";
 
 class ProfessionPicker extends Component {
   constructor(props) {
@@ -28,6 +29,14 @@ class ProfessionPicker extends Component {
   formatSuggestion = (i) => `${formatMessage(this.props.intl, "insuree", `Profession.${i}`)}`;
 
   onSuggestionSelected = (v) => this.props.onChange(v, this.formatSuggestion(v));
+  renderProfessionValues = (isHead, profession) => {
+    if (!!profession && !!isHead && isHead === true) {
+      const filteredProfession = profession.filter((p) => p !== INSUREE_PROFESSION_SELF_EMPLOYMENT);
+      return filteredProfession;
+    }
+    return profession;
+  };
+  
 
   render() {
     const {
@@ -43,11 +52,13 @@ class ProfessionPicker extends Component {
       required = false,
       withNull = false,
       nullLabel = null,
+      isHead,
     } = this.props;
+    const professionValues = this.renderProfessionValues(isHead, professions)
     return (
       <AutoSuggestion
         module="insuree"
-        items={professions}
+        items={professionValues}
         label={!!withLabel && (label || formatMessage(intl, "insuree", "ProfessionPicker.label"))}
         placeholder={
           !!withPlaceholder ? placeholder || formatMessage(intl, "insuree", "ProfessionPicker.placehoder") : null
