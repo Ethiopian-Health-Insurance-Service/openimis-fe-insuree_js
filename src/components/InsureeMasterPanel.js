@@ -202,7 +202,7 @@ class InsureeMasterPanel extends FormPanel {
                       onChangeAddress={(v) => this.updateAttribute("currentAddress", v)}
                     />
                   </Grid>
-                  {/* <Grid item xs={4} className={classes.item}>
+                  {this.fields.FamilyDetails !== "N" && ( <Grid item xs={4} className={classes.item}>
                     <TextInput
                       module="insuree"
                       label="Insuree.address"
@@ -211,7 +211,7 @@ class InsureeMasterPanel extends FormPanel {
                       value={!edited ? "" : edited.insureeAdress}
                       onChange={(v) => this.updateAttribute("address", v)}
                     />
-                  </Grid> */} 
+                  </Grid> )} 
                   <Grid item xs={6} className={classes.item}>
                     <TextInput
                       module="insuree"
@@ -372,8 +372,8 @@ class InsureeMasterPanel extends FormPanel {
                       label="Insuree.householdAddress"
                       multiline
                       readOnly={readOnly}
-                      value={!edited ? "" : edited.officeAdress}
-                      onChange={(v) => this.updateAttribute("address", v)}
+                      value={!edited ? "" : edited.householdAddress}
+                      onChange={(v) => this.updateAttribute("householdAddress", v)}
                     />
                   </Grid>
                   
