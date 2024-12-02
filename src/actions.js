@@ -288,7 +288,7 @@ function formatInsureePhoto(photo) {
 
 export function formatInsureeGQL(mm, insuree) {
   return `
-    ${insuree.uuid !== undefined && insuree.uuid !== null ? `uuid: "234234342342"` : ""}
+    ${insuree.uuid !== undefined && insuree.uuid !== null ? `uuid: "${insuree.uuid}"` : ""}
     ${!!insuree.chfId ? `chfId: "${formatGQLString(insuree.chfId)}"` : ""}
     ${!!insuree.lastName ? `lastName: "${formatGQLString(insuree.lastName)}"` : ""}
     ${!!insuree.otherNames ? `otherNames: "${formatGQLString(insuree.otherNames)}"` : ""}
