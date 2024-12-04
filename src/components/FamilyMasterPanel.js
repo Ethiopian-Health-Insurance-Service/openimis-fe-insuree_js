@@ -203,7 +203,7 @@ class FamilyMasterPanel extends FormPanel {
               label="Family.address"
               multiline
               readOnly={readOnly}
-              value={!edited ? "" : edited.officeAdress}
+              value={!edited ? "" : edited.address}
               onChange={(v) => this.updateAttribute("address", v)}
             />
           </Grid>
