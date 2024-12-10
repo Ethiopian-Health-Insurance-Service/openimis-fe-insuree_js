@@ -359,7 +359,6 @@ class InsureeMasterPanel extends FormPanel {
                       pubRef="location.DetailedLocation"
                       withNull={true}
                       readOnly={readOnly}
-                      required
                       value={!edited ? null : edited.householdLocation}
                       onChange={(v) => this.updateAttribute("householdLocation", v)}
                       filterLabels={false}
