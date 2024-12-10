@@ -126,6 +126,8 @@ export function fetchInsuree(mm, chfid) {
       "photo{folder,filename,photo}",
       "gender{code, gender, altLanguage}",
       "healthFacility" + mm.getProjection("location.HealthFacilityPicker.projection"),
+      "householdAddress",
+      "householdLocation" + mm.getProjection("location.Location.FlatProjection"),
     ],
   );
   return graphql(payload, "INSUREE_INSUREE");
@@ -330,7 +332,7 @@ export function formatInsureeGQL(mm, insuree) {
         : ""
     }
     ${!!insuree.jsonExt ? `jsonExt: ${formatJsonField(insuree.jsonExt)}` : ""}
-    ${!!insuree.attachments && insuree.attachments.length>0 ? formatAttachments(insuree.attachments): ""}
+    ${!!insuree.attachments && insuree.attachments.length > 0 ? formatAttachments(insuree.attachments) : ""}
     ${!!insuree.householdLocation ? `householdLocationId: ${decodeId(insuree.householdLocation.id)}` : ""}
   `;
 }
@@ -585,7 +587,7 @@ export function formatAttachments(attachments) {
     ${attachments.map((a) => formatAttachment(a)).join("\n")}
   ]`;
   }
-  return ``
+  return ``;
 }
 
 export function formatAttachment(attach) {
